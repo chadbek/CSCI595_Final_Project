@@ -32,20 +32,20 @@ Use `--graph_method` to select the graph construction strategy:
 
 ## Key Finding
 
-Pruning reduces the active graph size and saves VRAM compared with the static
-scene graph baseline.
+Question-conditioned graph construction improves short-answer accuracy over the
+static scene graph baseline. On `val_unbiased`, augment and prune both improve
+`Acc@Short` by about 3.4 points.
 
-Memory profile on `val_unbiased`, 3 batches:
+| Method | Acc@Short | Gain vs. static |
+| --- | ---: | ---: |
+| `static` | 90.13 | - |
+| `reweight` | 91.51 | +1.38 |
+| `augment` | 93.51 | +3.38 |
+| `prune` | 93.50 | +3.37 |
 
-| Batch size | Method | Edges in -> out | Eval VRAM MB | Train VRAM MB |
-| ---: | --- | --- | ---: | ---: |
-| 16 | static | 1328 -> 1328 | 349.6 | 1294.5 |
-| 16 | prune | 1328 -> 1128 | 347.2 | 1278.9 |
-| 64 | static | 5566 -> 5566 | 486.1 | 2361.4 |
-| 64 | prune | 5566 -> 4729 | 471.8 | 2316.8 |
-
-At batch size 64, prune removes 837 edges from the profiled batch and lowers
-peak training VRAM by about 44.6 MB.
+Prune is the best trade-off in our runs: it nearly matches augment's accuracy
+gain while also reducing the active graph. At batch size 64, prune lowers peak
+training VRAM from 2361.4 MB to 2316.8 MB.
 
 ## Setup
 
