@@ -1,5 +1,11 @@
 # GraphVQA: Language-Guided Graph Neural Networks for Scene Graph Question Answering
 
+> Project note: this folder contains the GraphVQA code used by our
+> question-conditioned graph construction experiments. For the current project
+> overview, setup, results, and reproduction commands, start with the repository
+> root `README.md`. `Constants.ROOT_DIR` is now auto-detected from the checkout
+> path, so the older manual root-directory edit below is no longer required.
+
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/graghvqa-language-guided-graph-neural/graph-question-answering-on-gqa)](https://paperswithcode.com/sota/graph-question-answering-on-gqa?p=graghvqa-language-guided-graph-neural)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/codexxxl/GraphVQA/blob/master/LICENSE)
 

@@ -682,13 +682,13 @@ if True:
         dataset_this = None
 
         # fileStr = SCENEGRAPHS / "val_sceneGraphs.json"
-        fileStr = ROOT_DIR / 'explainableGQA/sceneGraphs/val_sceneGraphs.json'
+        fileStr = ROOT_DIR / 'GraphVQA/sceneGraphs/val_sceneGraphs.json'
         with open(fileStr) as f:
             sg_data = json.load(f)
-        val_questions_path = ROOT_DIR / 'explainableGQA/questions/original/val_all_questions.json'
-        val_programs_path = ROOT_DIR / 'explainableGQA/questions/val_all_programs.json'
-        # val_questions_path = ROOT_DIR / 'explainableGQA/questions/original/val_balanced_masked_questions.json'
-        # val_programs_path = ROOT_DIR / 'explainableGQA/questions/val_balanced_masked_programs.json'
+        val_questions_path = ROOT_DIR / 'GraphVQA/questions/original/val_all_questions.json'
+        val_programs_path = ROOT_DIR / 'GraphVQA/questions/val_all_programs.json'
+        # val_questions_path = ROOT_DIR / 'GraphVQA/questions/original/val_balanced_masked_questions.json'
+        # val_programs_path = ROOT_DIR / 'GraphVQA/questions/val_balanced_masked_programs.json'
         with open(val_questions_path) as f:
             # total 132062 programs
             raw_data = json.load(f)

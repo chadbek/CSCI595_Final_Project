@@ -47,7 +47,7 @@ SPLIT_TO_PROGRAMMED_QUESTION_PATH_TABLE = {
      'val_unbiased': str(ROOT_DIR / 'GraphVQA/questions/val_balanced_programs.json'),
      'testdev': str(ROOT_DIR / 'GraphVQA/questions/testdev_balanced_programs.json'),
      'debug': str(ROOT_DIR / 'GraphVQA/debug_programs.json'),
-     'val_all': str(ROOT_DIR / 'explainableGQA/questions/val_all_programs.json')
+     'val_all': str(ROOT_DIR / 'GraphVQA/questions/val_all_programs.json')
 }
 
 class GQA_gt_sg_feature_lookup:

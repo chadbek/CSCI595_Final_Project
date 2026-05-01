@@ -10,7 +10,7 @@ import numpy as np
 
 
 # directory constants
-ROOT_DIR = pathlib.Path('/home/gpuhead-2/genai_project/')
+ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
 
 #  specials = list(OrderedDict.fromkeys(
             # tok for tok in [self.unk_token, self.pad_token, self.init_token,
