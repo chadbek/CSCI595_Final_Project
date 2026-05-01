@@ -1,0 +1,1 @@
+python openvqa/data/gqa/gqa_feat_preproc.py --mode=spatial --spatial_dir=./datasets/gqa/spatialFeatures --out=./openvqa/data/gqa/feats/gqa-grid/
