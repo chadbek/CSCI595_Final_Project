@@ -32,20 +32,20 @@ Use `--graph_method` to select the graph construction strategy:
 
 ## Key Finding
 
-Question-conditioned graph construction improves short-answer accuracy over the
-static scene graph baseline. On `val_unbiased`, augment and prune both improve
-`Acc@Short` by about 3.4 points.
+All three question-conditioned graph methods improve final short-answer
+accuracy over the static scene graph baseline. Program prediction accuracy stays
+roughly flat, while the answer head benefits from dynamic graph structure.
 
-| Method | Acc@Short | Gain vs. static |
-| --- | ---: | ---: |
-| `static` | 90.13 | - |
-| `reweight` | 91.51 | +1.38 |
-| `augment` | 93.51 | +3.38 |
-| `prune` | 93.50 | +3.37 |
+| Method | Program | Program Group | Program Non Empty | Short | Short Gain | Train min/epoch |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `static` | 96.75 | 87.25 | 94.72 | 90.13 | - | 6.61 |
+| `reweight` | 96.72 | 87.15 | 94.67 | 91.51 | +1.38 | 6.80 |
+| `augment` | 96.65 | 87.08 | 94.56 | 93.51 | +3.38 | 38.47 |
+| `prune` | 96.65 | 87.11 | 94.57 | 93.50 | +3.37 | 18.61 |
 
-Prune is the best trade-off in our runs: it nearly matches augment's accuracy
-gain while also reducing the active graph. At batch size 64, prune lowers peak
-training VRAM from 2361.4 MB to 2316.8 MB.
+Reweighting is the cheapest accuracy gain. Augmentation gives the highest
+short-answer accuracy. Pruning reaches almost the same short-answer accuracy as
+augmentation with a lower training-time cost.
 
 ## Setup
 
@@ -101,40 +101,43 @@ Preprocess the GQA questions:
 python preprocess.py
 ```
 
-Train a graph method:
+Train a graph method by setting `METHOD` to `static`, `reweight`, `augment`, or
+`prune`:
 
 ```bash
+METHOD=augment
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch \
   --nproc_per_node=4 \
   --use_env mainExplain_gat.py \
   --workers=4 \
   --batch-size=512 \
   --epochs=100 \
-  --graph_method=prune \
+  --graph_method=${METHOD} \
   --lr_drop=90 \
-  --output_dir=./outputdir/gat_prune_e100/
+  --output_dir=./outputdir/gat_${METHOD}_e100/
 ```
 
 Evaluate a checkpoint:
 
 ```bash
+METHOD=augment
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch \
   --nproc_per_node=4 \
   --use_env mainExplain_gat.py \
   --workers=4 \
   --batch-size=256 \
   --evaluate \
-  --resume=outputdir/gat_prune_e100/checkpoint0099.pth \
+  --resume=outputdir/gat_${METHOD}_e100/checkpoint0099.pth \
   --evaluate_sets val_unbiased \
-  --graph_method=prune \
-  --output_dir=./outputdir/gat_prune_e100_eval/
+  --graph_method=${METHOD} \
+  --output_dir=./outputdir/gat_${METHOD}_e100_eval/
 ```
 
-Profile the prune VRAM comparison:
+Profile all graph methods:
 
 ```bash
 python profile_memory_methods.py \
-  --methods static prune \
+  --methods static reweight augment prune \
   --batch-size 64 \
   --batches 3 \
   --warmup-batches 1 \
@@ -146,6 +149,8 @@ Expected checkpoint locations for profiling:
 
 ```text
 outputdir/gat_static_e100/checkpoint.pth
+outputdir/gat_reweight_e100/checkpoint.pth
+outputdir/gat_augment_e100/checkpoint.pth
 outputdir/gat_prune_e100/checkpoint.pth
 ```
 
